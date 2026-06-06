@@ -11,6 +11,7 @@ import BreakevenCalculator from './components/BreakevenCalculator';
 import Rankings from './components/Rankings';
 import Analytics from './components/Analytics';
 import Settings from './components/Settings';
+import PasswordGate from './components/PasswordGate';
 
 const pages: Record<Page, React.ReactNode> = {
   dashboard: <Dashboard />,
@@ -27,6 +28,13 @@ const pages: Record<Page, React.ReactNode> = {
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('dashboard');
+  const [authenticated, setAuthenticated] = useState(
+    () => sessionStorage.getItem('booth_auth') === 'true',
+  );
+
+  if (!authenticated) {
+    return <PasswordGate onUnlock={() => setAuthenticated(true)} />;
+  }
 
   return (
     <Layout currentPage={currentPage} onNavigate={setCurrentPage}>
